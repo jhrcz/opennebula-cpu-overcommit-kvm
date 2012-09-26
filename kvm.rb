@@ -16,6 +16,8 @@
 # limitations under the License.                                             #
 #--------------------------------------------------------------------------- #
 
+cpu_overcommit_multiplier = 2
+
 def print_info(name, value)
     value = "0" if value.nil? or value.to_s.strip.empty?
     puts "#{name}=#{value}"
@@ -31,7 +33,7 @@ exit(-1) if $?.exitstatus != 0
 
 nodeinfo_text.split(/\n/).each{|line|
     if     line.match('^CPU\(s\)')
-        $total_cpu   = line.split(":")[1].strip.to_i * 100
+        $total_cpu   = line.split(":")[1].strip.to_i * 100 * cpu_overcommit_multiplier.to_i
     elsif  line.match('^CPU frequency')
         $cpu_speed   = line.split(":")[1].strip.split(" ")[0]
     elsif  line.match('^Memory size')
